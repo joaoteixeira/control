@@ -1,4 +1,4 @@
-var app = angular.module('App', ['qrScanner']);
+var app = angular.module('App', ['webcam', 'bcQrReader']);
 
 
 app.controller('activityController', ['$scope', '$http', function ($scope, $http) {
@@ -8,6 +8,17 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
     $scope.key = {};
     $scope.btnActive = false;
     $scope.devolucao = '';
+
+    
+
+    $scope.start = function() {
+        $scope.cameraRequested = true;
+    }
+    
+    $scope.processURLfromQR = function (url) {
+      $scope.url = url;
+      $scope.cameraRequested = false;
+    }
 
     $scope.onSuccess = function (data) {
         $scope.loadingText = 'Buscando informações';

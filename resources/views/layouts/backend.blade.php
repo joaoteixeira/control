@@ -114,10 +114,14 @@
     <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
 
-    <script src="js/angular/angular.min.js"></script>
-    <script src="js/angular-qr-scanner/qr-scanner.js"></script>
-    <script src="js/angular-qr-scanner/src/jsqrcode-combined.min.js"></script>
+    <!-- <script src="js/angular/angular.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <!-- <script src="js/angular-qr-scanner/qr-scanner.js"></script> -->
+    <!-- <script src="js/angular-qr-scanner/src/jsqrcode-combined.min.js"></script> -->
     <script src="js/sweetalert2/dist/sweetalert2.min.js"></script>
+
+    <script src="js/webcam-directive/app/scripts/webcam.js"></script>
+    <script src="js/bc-qr-reader/dist/bc-qr-reader.js"></script>
 
 
     <script src="{{ asset('js/jquery-mask/jquery.mask.js') }}"></script>
@@ -126,7 +130,7 @@
 
 
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         $(function () {
             // Navigation active
             $('ul.navbar-nav a[href="{{ "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" }}"]').closest('li').addClass('active');
@@ -137,7 +141,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    </script>
+    </script> -->
 
     @yield('scripts')
 </body>

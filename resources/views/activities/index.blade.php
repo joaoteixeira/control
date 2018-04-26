@@ -3,7 +3,7 @@
 @section('style')
     <style>
         .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
-        #reader {
+        /* #reader {
             position: relative;
             text-align: center;
             top: 0;
@@ -19,9 +19,9 @@
             left: 0;
             min-width: 100%;
             min-height: 100%;
-            /*z-index: -100;*/
+            /*z-index: -100;
 
-        }
+        } */
         /*#reader video {*/
         /*position: absolute;*/
         /*top: 0;*/
@@ -56,7 +56,10 @@
         <div class="card box-shadow mb-4" ng-controller="activityController">
 
             <div class="card-body">
-                <p class="lead">Atividades <small>Retirada/Devolução</small></p>
+                <p class="lead">Atividades <small>Retirada/Devolução</small>
+                
+                <button class="btn btn-sm btn-info" ng-click="start()">Ativar cam</button>
+                </p>
 
                     <div class="row">
                         <div class="col-md-3">
@@ -64,11 +67,15 @@
                                 <div class="card-header">Qr Code <small>Leitura</small></div>
                                 <div class="card-body" style="">
                                     <div id="reader" class="center-block">
-                                        <qr-scanner  ng-success="onSuccess(data)" ng-error="onError(error)" />
+                                        <!-- <qr-scanner  ng-success="onSuccess(data)" ng-error="onError(error)" /> -->
+                                        <bc-qr-reader 
+                                            active="cameraRequested"
+                                            on-result="processURLfromQR"
+                                        ></bc-qr-reader>
                                     </div>
                                 </div>
                                 <div class="card-footer text-muted text-center">
-                                    <small id="description" ng-bind="loadingText"></small>
+                                    <small id="description" ng-bind="url"></small>
                                 </div>
                             </div>
                         </div>
