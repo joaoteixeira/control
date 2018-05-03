@@ -149,13 +149,13 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
     clearScopeKeyPerson = function () {
         $scope.key = {}
         $scope.person = {}
-    },
+    };
 
-    clearPerson = function () {
+    $scope.clearPerson = function () {
         $scope.person = {}
-    },
+    };
 
-    clearKey = function () {
+    $scope.clearKey = function () {
         $scope.key = {}
-    }
+    };
 }]);
