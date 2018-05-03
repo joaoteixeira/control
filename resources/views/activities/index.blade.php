@@ -3,7 +3,8 @@
 @section('style')
     <style>
         .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
-        /* #reader {
+        #qr-canvas { display: none }
+        #reader {
             position: relative;
             text-align: center;
             top: 0;
@@ -13,23 +14,23 @@
             color: #fff;
             overflow: hidden;
         }
-        #reader video {
+        /* #reader video {
             position: absolute;
             top: -50px;
             left: 0;
             min-width: 100%;
             min-height: 100%;
-            /*z-index: -100;
+            z-index: 100;
 
         } */
-        /*#reader video {*/
-        /*position: absolute;*/
-        /*top: 0;*/
-        /*left: 0;*/
-        /*min-width:100%;*/
-        /*min-height:100%;*/
-        /*!*z-index: -100;*!*/
-        /*}*/
+        #reader video {
+            position: absolute;
+            top: 0;
+            left: -15%;
+            min-width:100%;
+            min-height:100%;
+            z-index: 100;
+        }
         .card {
             height: 100%;
         }
@@ -53,13 +54,10 @@
 @section('content')
     <div class="container" ng-app="App">
 
-        <div class="card box-shadow mb-4" ng-controller="activityController">
+        <div class="card box-shadow mb-4" ng-controller="activityController" ng-init="start()">
 
             <div class="card-body">
-                <p class="lead">Atividades <small>Retirada/Devolução</small>
-                
-                <button class="btn btn-sm btn-info" ng-click="start()">Ativar cam</button>
-                </p>
+                <p class="lead">Atividades <small>Retirada/Devolução</small></p>
 
                     <div class="row">
                         <div class="col-md-3">
@@ -70,12 +68,13 @@
                                         <!-- <qr-scanner  ng-success="onSuccess(data)" ng-error="onError(error)" /> -->
                                         <bc-qr-reader 
                                             active="cameraRequested"
-                                            on-result="processURLfromQR"
+                                            on-result="onSuccess"
+                                            camera-status="cameraIsOn"
                                         ></bc-qr-reader>
                                     </div>
                                 </div>
                                 <div class="card-footer text-muted text-center">
-                                    <small id="description" ng-bind="url"></small>
+                                    <small id="description">@{{ loadingText }}</small>
                                 </div>
                             </div>
                         </div>

@@ -6,21 +6,14 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
     $scope.loadingText = 'Aguardando Qr Code';
     $scope.person = {};
     $scope.key = {};
-    $scope.btnActive = false;
     $scope.devolucao = '';
-
-    
 
     $scope.start = function() {
         $scope.cameraRequested = true;
     }
-    
-    $scope.processURLfromQR = function (url) {
-      $scope.url = url;
-      $scope.cameraRequested = false;
-    }
 
     $scope.onSuccess = function (data) {
+        $scope.cameraRequested = false;
         $scope.loadingText = 'Buscando informações';
 
         swal({ text: 'Buscando informações', onOpen: function () { swal.showLoading() } });
@@ -51,6 +44,7 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
                     swal({ type: 'error', text: 'Código não encontrado!', timer: 3000 });
                 }
 
+                $scope.cameraRequested = true;
                 $scope.loadingText = 'Aguardando Qr Code';
             });
 
