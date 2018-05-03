@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use App\Key;
 use App\Person;
 use App\Room;
@@ -108,16 +109,22 @@ class ActivitiesController extends Controller
 
         $personSelect = null;
         $id = null;
+        $email = null;
 
         foreach ($people as $person) {
             if (empty($person->pivot->devolucao)) {
                 $id = $person->pivot->id;
+                $nome = $person->nome;
+                $email = $person->email;
                 break;
             }
         }
 
         if ($id) {
             DB::table('keys_has_people')->where('id', $id)->update(['devolucao' => (new \DateTime('NOW'))->format('Y-m-d H:i:s')]);
+
+            $this->sendEmail($nome, $email, $key);
+
             $key->disponivel = true;
             $key->save();
 
@@ -142,6 +149,14 @@ class ActivitiesController extends Controller
         // }
 
         return response()->json(['success' => false]);
+    }
+
+    private function sendEmail($nome, $email, $key) {
+        Mail::send('emails.back', ['key' => $key, 'nome' => $nome], function ($m) use ($email, $nome) {
+            $m->from(env('MAIL_FROM_EMAIL', 'noreply@ifro.edu.br'), env('MAIL_FROM_NAME', 'IFRO - Ji-Paraná'));                
+
+            $m->to($email, $nome)->subject("Chave devolvida");
+        });
     }
 
     public function control()
