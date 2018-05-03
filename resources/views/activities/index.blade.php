@@ -84,7 +84,9 @@
 
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header">Informações <small>Servidor/Aluno</small></div>
+                                        <div class="card-header">Informações <small>Servidor/Aluno</small>
+                                            <span class="text-right"><button class="btn btn-sm btn-danger" ng-click="clearPerson()">Limpar informação</button></span>
+                                        </div>
                                         <div class="card-body">
                                             <p class="lead text-center" ng-if="!person.nome">Aguardando informações</p>
                                             <div ng-if="person.nome">
@@ -100,7 +102,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header">Informações <small>Chave</small></div>
+                                        <div class="card-header">Informações <small>Chave</small>
+                                            <span class="text-right"><button class="btn btn-sm btn-danger" ng-click="clearKey()">Limpar informação</button></span>
+                                        </div>
                                         <div class="card-body">
                                             <p class="lead text-center" ng-if="!key.copia">Aguardando informações</p>
                                             <div ng-if="key.copia">

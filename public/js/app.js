@@ -25,20 +25,20 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
 
                 if (data.success) {
 
-                    if (data.tipo == 'key' && !$scope.person.qr_code)
+                    if (data.tipo == 'key')
                         $scope.key = data.data;
 
-                    if (data.tipo == 'person' && !$scope.key.qr_code)
+                    if (data.tipo == 'person')
                         $scope.person = data.data;
 
                     if (data.tipo == 'devolucao')
                         devolucaoChave(data.data);
 
-                    if (data.tipo == 'pendencia') {
+                    if (data.tipo == 'pendencia')
                         pendenciaChave(data.data);
-                    } else {
+                    
+                    if($scope.key.qr_code && $scope.person.qr_code) 
                         retirarChave();
-                    }
 
                 } else {
                     swal({ type: 'error', text: 'Código não encontrado!', timer: 3000 });
@@ -149,5 +149,13 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
     clearScopeKeyPerson = function () {
         $scope.key = {}
         $scope.person = {}
+    },
+
+    clearPerson = function () {
+        $scope.person = {}
+    },
+
+    clearKey = function () {
+        $scope.key = {}
     }
 }]);
