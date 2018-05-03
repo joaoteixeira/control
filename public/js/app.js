@@ -25,10 +25,10 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
 
                 if (data.success) {
 
-                    if (data.tipo == 'key' && !$scope.key.qr_code)
+                    if (data.tipo == 'key' && !$scope.person.qr_code)
                         $scope.key = data.data;
 
-                    if (data.tipo == 'person' && !$scope.person.qr_code)
+                    if (data.tipo == 'person' && !$scope.key.qr_code)
                         $scope.person = data.data;
 
                     if (data.tipo == 'devolucao')
