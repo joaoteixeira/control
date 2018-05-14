@@ -18,9 +18,12 @@
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/', 'Admin\AdminController@index');
+Route::get('/', function () {
+  return redirect()->route('activities');
+});
 
-Route::get('/', 'Admin\AdminController@index');
 Route::get('admin', 'Admin\AdminController@index');
 Route::resource('admin/roles', 'Admin\RolesController');
 Route::resource('admin/permissions', 'Admin\PermissionsController');
