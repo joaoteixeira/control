@@ -133,4 +133,15 @@ class KeysController extends Controller
 
         return redirect('keys')->with('flash_message', 'Key deleted!');
     }
+
+    public function print(Request $request)
+    {
+        $keys = null;
+
+        if($request->keys)
+          $keys = Key::whereIn('id', $request->keys)->get();
+        
+
+        return view('keys.print', compact('keys'));
+    }
 }

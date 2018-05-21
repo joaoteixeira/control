@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Key extends Model
 {
@@ -35,6 +36,12 @@ class Key extends Model
     public function people() {
         return $this->belongsToMany('App\Person', 'keys_has_people', 'key_id','people_id')
             ->withPivot('retirada', 'devolucao', 'id');
+    }
+
+    public function qrCodeBase64() {
+        $qr_code = base64_encode(QrCode::format('png')->size(80)->margin(0)->generate($this->qr_code));
+
+        return "data:image/png;base64,{$qr_code}";
     }
 
 }

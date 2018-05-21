@@ -11,18 +11,18 @@
 |
 */
 
-//Route::get('/', function () {
+// Route::get('/', function () {
 //    return view('welcome');
-//});
+// });
 
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
-//Route::get('/', 'Admin\AdminController@index');
-Route::get('/', function () {
-  return redirect()->route('activities');
-});
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'Admin\AdminController@index');
+// Route::get('/', function () {
+//   return redirect()->route('activities');
+// });
 
 Route::get('admin', 'Admin\AdminController@index');
 Route::resource('admin/roles', 'Admin\RolesController');
@@ -35,6 +35,7 @@ Route::resource('campi', 'CampiController');
 
 Route::resource('rooms', 'RoomsController');
 Route::resource('keys', 'KeysController');
+Route::post('keys/print', 'KeysController@print');
 Route::resource('people', 'PeopleController');
 
 

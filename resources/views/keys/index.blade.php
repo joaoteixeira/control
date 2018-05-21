@@ -9,7 +9,7 @@
                     <div class="card-header">Keys</div>
                     <div class="card-body">
                         <a href="{{ url('/keys/create') }}" class="btn btn-success btn-sm" title="Add New Key">
-                            <i class="fa fa-plus" aria-hidden="true"></i> Add New
+                            <i class="fa fa-plus" aria-hidden="true"></i> Adicionar Chave
                         </a>
 
                         {!! Form::open(['method' => 'GET', 'url' => '/keys', 'class' => 'form-inline my-2 my-lg-0 float-right', 'role' => 'search'])  !!}
@@ -23,49 +23,59 @@
                         </div>
                         {!! Form::close() !!}
 
+                        {!! Form::open(['method' => 'POST', 'url' => '/keys/print'])  !!}
+
+                        <!-- , 'class' => 'form-inline my-2 my-lg-0 float-right', 'role' => 'search' -->
+
+                        <button class="btn btn-primary btn-sm" type="submit">
+                            <i class="fa fa-print"></i> Imprimir Etiquetas
+                        </button>
+
                         <br/>
                         <br/>
                         <div class="table-responsive">
-                            <table class="table table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Sala</th>
-                                        <th>Copia</th>
-                                        <th>Disponivel</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($keys as $item)
-                                    <tr>
-                                        <td>{{ $loop->iteration or $item->id }}</td>
-                                        <td>{{ $item->room->numero }} - {{ $item->room->descricao }}</td>
-                                        <td>{{ str_pad($item->copia, 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td>{{ $item->disponivel ? 'Sim': 'Não' }}</td>
-                                        <td>
-                                            <a href="{{ url('/keys/' . $item->id) }}" title="View Key"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-                                            {{--<a href="{{ url('/keys/' . $item->id . '/edit') }}" title="Edit Key"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>--}}
-                                            {!! Form::open([
-                                                'method'=>'DELETE',
-                                                'url' => ['/keys', $item->id],
-                                                'style' => 'display:inline'
-                                            ]) !!}
-                                                {!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete', array(
-                                                        'type' => 'submit',
-                                                        'class' => 'btn btn-danger btn-sm',
-                                                        'title' => 'Delete Key',
-                                                        'onclick'=>'return confirm("Confirm delete?")'
-                                                )) !!}
-                                            {!! Form::close() !!}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox"></th>
+                                            <th>#</th>
+                                            <th>Sala</th>
+                                            <th>Copia</th>
+                                            <th>Disponivel</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($keys as $item)
+                                        <tr>
+                                            <td><input type="checkbox" name="keys[]" value="{{ $item->id }}"></td>
+                                            <td>{{ $loop->iteration or $item->id }}</td>
+                                            <td>{{ $item->room->numero }} - {{ $item->room->descricao }}</td>
+                                            <td>{{ str_pad($item->copia, 2, '0', STR_PAD_LEFT) }}</td>
+                                            <td>{{ $item->disponivel ? 'Sim': 'Não' }}</td>
+                                            <td>
+                                                <a href="{{ url('/keys/' . $item->id) }}" title="View Key" class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                                                {{--<a href="{{ url('/keys/' . $item->id . '/edit') }}" title="Edit Key"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>--}}
+                                                <!-- {!! Form::open([
+                                                    'method'=>'DELETE',
+                                                    'url' => ['/keys', $item->id],
+                                                    'style' => 'display:inline'
+                                                ]) !!}
+                                                    {!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete', array(
+                                                            'type' => 'submit',
+                                                            'class' => 'btn btn-danger btn-sm',
+                                                            'title' => 'Delete Key',
+                                                            'onclick'=>'return confirm("Confirm delete?")'
+                                                    )) !!}
+                                                {!! Form::close() !!} -->
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             <div class="pagination-wrapper"> {!! $keys->appends(['search' => Request::get('search')])->render() !!} </div>
                         </div>
-
+                        {!! Form::close() !!}                                   
                     </div>
                 </div>
             </div>
