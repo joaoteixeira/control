@@ -24,7 +24,7 @@
         }
 
         @page {
-            size: 85mm 54mm;
+            size: 54mm 85mm;
             margin: 0;
         }
 
@@ -70,15 +70,18 @@
     .key { 
         position: relative;
         height: 25mm;
-        margin-bottom: 3mm;
+        margin-bottom: 2mm;
+        margin-top: 3mm;
+        margin-left: 1mm;
         border-radius: 3mm;
         border: 2px solid #000;
+        width: 53mm;
     }
 
     .logo {
         position: absolute;
         top: 5mm;
-        left: 1mm;
+        /* left: 1mm; */
         width: 55px;
     }
 
@@ -90,7 +93,7 @@
         font-family: 'Roboto', sans-serif;
         font-weight: bold;
         position: absolute;
-        left: 15mm;
+        left: 14mm;
         top: 5mm;
         width: 68px;
         text-transform: uppercase;
@@ -145,6 +148,10 @@
         @endforeach
         </div>
     </div>
+    @else
+        <div>
+            Nenhuma informação enviada!
+        </div>
     @endif
 </body>
 </html>

@@ -47,7 +47,10 @@
                                     </tr>
                                     <tr>
                                         <th> Qr Code </th>
-                                        <td> {!! QrCode::size(200)->generate($key->qr_code) !!} </td>
+                                        <td> 
+                                        <img src="data:image/png;base64,{!! base64_encode(QrCode::format('png')->size('100')->margin(0)->generate($key->qr_code)) !!}">
+                                        <!-- {!! QrCode::size(200)->format('png')->generate($key->qr_code) !!}  -->
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

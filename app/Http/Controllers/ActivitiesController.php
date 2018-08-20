@@ -122,41 +122,28 @@ class ActivitiesController extends Controller
 
         if ($id) {
             DB::table('keys_has_people')->where('id', $id)->update(['devolucao' => (new \DateTime('NOW'))->format('Y-m-d H:i:s')]);
-
-            $this->sendEmail($nome, $email, $key);
-
+            
             $key->disponivel = true;
             $key->save();
 
+            $this->sendEmail($nome, $email, $key);
+
             return response()->json(['success' => true]);
         }
-
-
-        //TODO  Corrigir data de devolução - está alterando todos os registros
-        // if ($personSelect) {
-        //    $personSelect->pivot->devolucao = (new \DateTime('NOW'))->format('Y-m-d H:i:s');
-        //    $personSelect->pivot->save();
-
-        //     $key->people()->save($personSelect, ['devolucao' => (new \DateTime('NOW'))->format('Y-m-d H:i:s')]);
-
-        //    $key->people()->updateExistingPivot($personSelect->id, [
-        //        'devolucao' => (new \DateTime('NOW'))->format('Y-m-d H:i:s')
-        //    ]);
-        //    $key->disponivel = true;
-        //    $key->save();
-
-        //    return response()->json(['success' => true]);
-        // }
 
         return response()->json(['success' => false]);
     }
 
     private function sendEmail($nome, $email, $key) {
-        Mail::send('emails.back', ['key' => $key, 'nome' => $nome], function ($m) use ($email, $nome) {
-            $m->from(env('MAIL_FROM_EMAIL', 'noreply@ifro.edu.br'), env('MAIL_FROM_NAME', 'IFRO - Ji-Paraná'));                
+        try {
+            Mail::send('emails.back', ['key' => $key, 'nome' => $nome], function ($m) use ($email, $nome) {
+                $m->from(env('MAIL_FROM_EMAIL', 'noreply@ifro.edu.br'), env('MAIL_FROM_NAME', 'IFRO - Ji-Paraná'));                
+    
+                $m->to($email, $nome)->subject("Chave devolvida");
+            });
+        } catch (\Exception $e) {
 
-            $m->to($email, $nome)->subject("Chave devolvida");
-        });
+        }
     }
 
     public function control()
