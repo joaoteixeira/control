@@ -6,6 +6,7 @@ use Mail;
 use App\Key;
 use App\Person;
 use App\Room;
+use App\ListaEnvio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -122,11 +123,15 @@ class ActivitiesController extends Controller
 
         if ($id) {
             DB::table('keys_has_people')->where('id', $id)->update(['devolucao' => (new \DateTime('NOW'))->format('Y-m-d H:i:s')]);
-            
+
             $key->disponivel = true;
             $key->save();
 
-            $this->sendEmail($nome, $email, $key);
+            ListaEnvio::create([
+                'nome' => $nome,
+                'email' => $email,
+                'dados' => json_encode([ 'key' => $key->qr_code ])
+            ]);
 
             return response()->json(['success' => true]);
         }

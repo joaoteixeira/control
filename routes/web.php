@@ -24,22 +24,28 @@ Route::get('/', 'Admin\AdminController@index');
 //   return redirect()->route('activities');
 // });
 
-Route::get('admin', 'Admin\AdminController@index');
-Route::resource('admin/roles', 'Admin\RolesController');
-Route::resource('admin/permissions', 'Admin\PermissionsController');
-Route::resource('admin/users', 'Admin\UsersController');
-Route::get('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@getGenerator']);
-Route::post('admin/generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@postGenerator']);
+
+
+Route::get('admin', 'Admin\AdminController@index')->middleware('auth');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+
+    Route::resource('roles', 'Admin\RolesController');
+    Route::resource('permissions', 'Admin\PermissionsController');
+    Route::resource('users', 'Admin\UsersController');
+    Route::get('generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@getGenerator']);
+    Route::post('generator', ['uses' => '\Appzcoder\LaravelAdmin\Controllers\ProcessController@postGenerator']);
+
+});
 
 Route::resource('campi', 'CampiController');
-
 Route::resource('rooms', 'RoomsController');
 Route::resource('keys', 'KeysController');
 Route::post('keys/print', 'KeysController@print');
 Route::resource('people', 'PeopleController');
 
-
 Route::resource('activities', 'ActivitiesController');
 Route::post('activities/take', 'ActivitiesController@take');
 Route::post('activities/back', 'ActivitiesController@back');
+
 Route::get('controls', 'ActivitiesController@control');   
