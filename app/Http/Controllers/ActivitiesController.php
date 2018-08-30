@@ -9,6 +9,7 @@ use App\Room;
 use App\ListaEnvio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Adldap\Laravel\Facades\Adldap;
 
 class ActivitiesController extends Controller
 {
@@ -43,36 +44,29 @@ class ActivitiesController extends Controller
         $person = Person::where('qr_code', $request->data)->with('campi')->first();
 
         if ($person) {
-            //Verifica se existe chave sem devolver com + de um dia
-            //DB::enableQueryLog();
-            //$q = DB::getQueryLog();
-
             $dateNow = (new \DateTime('NOW'))->format('Y-m-d');
 
             $keys = $person->keys()->wherePivot('devolucao', null)->whereDate('retirada', '<', $dateNow);
 
             if ($keys->count()) {
-                return ['success' => true, 'tipo' => 'pendencia', 'data' => [
+                return response()->json(['success' => true, 'tipo' => 'pendencia', 'data' => [
                     'person' => $person,
                     'keys'   => $keys->with('room')->get()
-                ]];
+                ]]);
             }
 
-
-            return ['success' => true, 'tipo' => 'person', 'data' => $person];
+            return response()->json(['success' => true, 'tipo' => 'person', 'data' => $person]);
         }
 
         $key = Key::where('qr_code', $request->data)->with('room')->first();
 
         if ($key) {
-
             $tipo = $key->disponivel ? 'key' : 'devolucao';
 
             return response()->json(['success' => true, 'tipo' => $tipo, 'data' => $key]);
         }
 
-
-        return ['success' => false];
+        return response()->json(['success' => false]);
     }
 
     public function take(Request $request)
@@ -81,14 +75,14 @@ class ActivitiesController extends Controller
         $key = Key::where('qr_code', $request->key)->first();
 
         if ($person && $key) {
-                        
+
             $keyRetidara = $person->keys()->wherePivot('devolucao', null)->where('room_id', $key->room_id);
 
-            if($keyRetidara->count()) {
+            if ($keyRetidara->count()) {
                 return response()->json(['success' => false, 'tipo' => 'copia_retirada', 'data' => [
-                    'key' => $keyRetidara->with('room')->first(),
+                    'key'    => $keyRetidara->with('room')->first(),
                     'person' => $person
-                    ]
+                ]
                 ]);
             }
 
@@ -127,11 +121,7 @@ class ActivitiesController extends Controller
             $key->disponivel = true;
             $key->save();
 
-            ListaEnvio::create([
-                'nome' => $nome,
-                'email' => $email,
-                'dados' => json_encode([ 'key' => $key->qr_code ])
-            ]);
+            ListaEnvio::create(['nome' => $nome, 'email' => $email, 'dados' => json_encode(['key' => $key->qr_code])]);
 
             return response()->json(['success' => true]);
         }
@@ -139,11 +129,32 @@ class ActivitiesController extends Controller
         return response()->json(['success' => false]);
     }
 
-    private function sendEmail($nome, $email, $key) {
+    public function checkUser(Request $request)
+    {
+        $user = Adldap::search()->where('samaccountname', '=', $request->user)->first();
+
+        if (!$user)
+            return response()->json(['success' => false, 'tipo' => 'user_not_found']);
+
+        if (!$user->isActive())
+            return response()->json(['success' => false, 'tipo' => 'user_disabled']);
+
+        $username = $request->user . '@ifro.local';
+        if (!Adldap::auth()->attempt($username, $request->password))
+            return response()->json(['success' => false, 'tipo' => 'user_and_pass_error']);
+
+        $column = strlen($request->user) == 7 ? 'siape' : 'cpf';
+        $person = Person::where($column, $request->user)->with('campi')->first();
+
+        return response()->json(['success' => true, 'data' => $person]);
+    }
+
+    private function sendEmail($nome, $email, $key)
+    {
         try {
             Mail::send('emails.back', ['key' => $key, 'nome' => $nome], function ($m) use ($email, $nome) {
-                $m->from(env('MAIL_FROM_EMAIL', 'noreply@ifro.edu.br'), env('MAIL_FROM_NAME', 'IFRO - Ji-Paraná'));                
-    
+                $m->from(env('MAIL_FROM_EMAIL', 'noreply@ifro.edu.br'), env('MAIL_FROM_NAME', 'IFRO - Ji-Paraná'));
+
                 $m->to($email, $nome)->subject("Chave devolvida");
             });
         } catch (\Exception $e) {
