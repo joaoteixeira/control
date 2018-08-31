@@ -77,7 +77,17 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
         //console.log(error);
     };
 
-    var retirarChave = function () {
+    var showLoading = function () {
+            swal({
+                text: 'Buscando informações', onOpen: function () {
+                    swal.showLoading()
+                }
+            });
+        },
+        closeLoading = function () {
+            swal.close();
+        },
+        retirarChave = function () {
 
             if ($scope.person.qr_code && $scope.key.qr_code) {
 
@@ -226,8 +236,12 @@ app.controller('activityController', ['$scope', '$http', function ($scope, $http
 
     $scope.checkUserPass = function () {
         if ($scope.user.name && $scope.user.pass) {
+
+            showLoading();
+
             $http.post('/activities/check-user', {user: $scope.user.name, password: $scope.user.pass})
                 .then(function (response) {
+                    closeLoading();
                     var data = response.data;
 
 
